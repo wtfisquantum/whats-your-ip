@@ -193,11 +193,18 @@ disabled={loading}
 
 </div>
 ) : (
-    <div></div>
+    <div className="h-full flex flex-col items-center justify-center text-zinc-400 pb-20">
+               <i className="ph ph-radar text-5xl mb-4 opacity-30"></i>
+               <p className="text-sm font-medium tracking-wide">Awaiting input.</p>
+   </div>
 )}
 
 </div>
 </div>
+
+
+
+
     </div>
   );
 }
