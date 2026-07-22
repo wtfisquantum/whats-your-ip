@@ -158,6 +158,7 @@ disabled={loading}
     {ipData.hosting && <FlatBadge isActive={true}>Data Center</FlatBadge>}
 </div>
 </div>
+<div className="space-y-12">
 
 <div>
     <h3 className="text-sm font-bold text-zinc-800 uppercase tracking-widest border-b border-zinc-200 pb-4 mb-4 flex items-center gap-3">
@@ -168,8 +169,27 @@ disabled={loading}
      <DataRow icon="ph-flag" label="Country" value={`${ipData.country || 'Unknown'} (${ipData.countryCode || '-'})`} />
       <DataRow icon="ph-push-pin" label="ZIP / Postal" value={ipData.zip} />
     <DataRow icon="ph-crosshair" label="Coordinates" value={`${ipData.lat}, ${ipData.lon}`} />
-                
-    </div>
+ </div>
+
+ <div>
+      <h3 className="text-sm font-bold text-zinc-800 uppercase tracking-widest border-b border-zinc-200 pb-4 mb-4 flex items-center gap-3">
+    <i className="ph ph-globe text-xl text-zinc-500"></i>
+           Network Details
+       </h3>
+ <DataRow icon="ph-wifi-high" label="Internet Provider (ISP)" value={ipData.isp} />
+                  <DataRow icon="ph-hard-drives" label="Organization ~ ASN" value={`${ipData.org || '-'} ~ \n ${ipData.as || ''}`} />   
+</div>
+
+    <div>
+                  <h3 className="text-sm font-bold text-zinc-800 uppercase tracking-widest border-b border-zinc-200 pb-4 mb-4 flex items-center gap-3">
+                    <i className="ph ph-cpu text-xl text-zinc-500"></i>
+                    System Context
+                  </h3>
+                  <DataRow icon="ph-clock" label="Timezone" value={`${ipData.timezone} (UTC ${ipData.offset / 3600 >= 0 ? '+' : ''}${ipData.offset / 3600})`} />
+                  <DataRow icon="ph-currency-circle-dollar" label="Local Currency" value={ipData.currency} />
+
+</div>
+</div>
 
 </div>
 ) : (
