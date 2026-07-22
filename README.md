@@ -1,75 +1,33 @@
-# React + TypeScript + Vite
+<p align="center">
+	<h1 align="center">What's Your IP?</h1>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+What's Your IP..? is a simple web application that lets you look up information about an IP address. Enter any IPv4 or IPv6 address to view useful details along with its location on an interactive map...
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+What's Your IP? lets you:
 
-## React Compiler
+* look up information about any IP address..
+* view country, city, region, ISP and ASN details..
+* check whether the IP belongs to a datacenter, mobile network or residential network..
+* see the IP's approximate location on an interactive Leaflet map..
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The project focuses on providing a clean and easy way to explore UI.
 
-## Expanding the ESLint configuration
+## Motivation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+I built this project mainly to learn and experiment with Leaflet... I wanted to understand how interactive maps work and can be used in projects.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* React Vite
+* Leaflet
+* IP Geolocation API
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## How It Works
 
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+1. Enter an IP address or it fetched your's automatically..
+2. The application fetches information about the IP...
+3. Details such as location, ISP, ASN, network type and datacenter status are displayed...
+4. The approximate location is shown on an interactive Leaflet map that you can zoom and explore...

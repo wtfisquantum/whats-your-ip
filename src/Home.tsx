@@ -5,7 +5,7 @@ import FlatBadge from "./components/FlatBadge";
 import FormattedIP from "./components/FormattedIP";
 import Loading from "./components/Loading";
 
-const LeafletMap = (lat, lon, city) => {
+const LeafletMap = ({lat, lon, city}) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const makerInstance = useRef(null as any);
@@ -73,7 +73,7 @@ export default function App() {
     setError(null);
     try {
       const baseurl = "https://api-point-ip-details.vercel.app";
-      const target = ip ? `${baseurl}/ip?=${ip}` : baseurl;
+      const target = ip ? `${baseurl}/?ip=${ip}` : baseurl;
 
       const response = await fetch(target);
       const data = await response.json();
@@ -202,7 +202,21 @@ disabled={loading}
 </div>
 </div>
 
+<div className="flex-1 relative bg-zinc-200 z-0 h-[45vh] lg:h-screen border-t lg:border-t-0 border-zinc-200 ">
+{
+ipData && ipData.lat && ipData.lon ? (
+    <LeafletMap lat={ipData.lat} lon={ipData.lon} city={ipData.city}/>
+) : (
+    <div className="w-full h-full flex items-center justify-center bg-zinc-100">
+ <div className="flex flex-col items-center space-y-4 opacity-30">
+               <i className="ph ph-map-trifold text-4xl"></i>
+               <span className="text-sm font-medium tracking-widest uppercase">Location Map Disabled</span>
+             </div>
+        </div>
+)
 
+}
+    </div>
 
 
     </div>
