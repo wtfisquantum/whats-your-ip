@@ -16,6 +16,9 @@ function App() {
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
+          <p> this is a simple text and what else can you expect from this man this is just a thing</p>
+        </div>
+        <div>
           <h1>Get started and rock the best im in love with all these things what is this bruuh what is this..</h1>
           <p>
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
