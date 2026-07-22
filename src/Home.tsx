@@ -64,6 +64,10 @@ export default function App() {
   const [searchInput, setSearchInput] = useState('');
   const [isDefaultIp, setIsDefaultIp] = useState(true);
 
+  useEffect(() => {
+    fetchIP();
+  }, []);
+
   const fetchIP = async (ip = "") => {
     setLoading(true);
     setError(null);
@@ -74,9 +78,9 @@ export default function App() {
       const response = await fetch(target);
       const data = await response.json();
 
-      if (data.success === "success") {
+      if (data.status === 'success') {
         setIpData(data);
-        setIsDefaultIP(!ip);
+        setIsDefaultIp(!ip);
       } else {
         throw new Error(data.message || "Failed to fetch IP data");
       }
@@ -129,9 +133,47 @@ disabled={loading}
 )}
 
 <div className="flex-1 overflow-y-auto px-8 py-10 custom-scrollbar">
-{loading ? <Loading/> : (
-    <>
-    </>
+{loading ? <Loading/> : ipData ? (
+<div className="space-y-12 pb-12">
+<div>
+{isDefaultIp ? (
+
+     <div className="flex items-center gap-3 mb-4">
+                      <span className="relative flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-zinc-800"></span>
+                      </span>
+                      <span className="text-xs font-bold text-zinc-500 uppercase tracking-[0.15em]">Your Current Connection</span>
+                   </div>
+) : (
+    <div className="text-xs font-bold text-zinc-400 uppercase tracking-[0.15em] mb-4">Target Traced</div>           
+)}
+
+<FormattedIP ip={ipData.query}/>
+
+<div className="flex flex-wrap items-center gap-3 mt-6">
+    <FlatBadge isActive={true}>Trace Active</FlatBadge>
+    {ipData.mobile && <FlatBadge isActive={true}>Mobile Data</FlatBadge>}
+    {ipData.proxy && <FlatBadge isActive={true}>Proxy / VPN</FlatBadge>}
+    {ipData.hosting && <FlatBadge isActive={true}>Data Center</FlatBadge>}
+</div>
+</div>
+
+<div>
+    <h3 className="text-sm font-bold text-zinc-800 uppercase tracking-widest border-b border-zinc-200 pb-4 mb-4 flex items-center gap-3">
+        <i className="ph ph-map-pin-line text-xl text-zinc-500"></i>
+    Geolocation
+    </h3>
+    <DataRow icon="ph-buildings" label="City & Region" value={`${ipData.city || "Unknown"}, ${ipData.regionName || "Unknown"}`}/>
+     <DataRow icon="ph-flag" label="Country" value={`${ipData.country || 'Unknown'} (${ipData.countryCode || '-'})`} />
+      <DataRow icon="ph-push-pin" label="ZIP / Postal" value={ipData.zip} />
+    <DataRow icon="ph-crosshair" label="Coordinates" value={`${ipData.lat}, ${ipData.lon}`} />
+                
+    </div>
+
+</div>
+) : (
+    <div></div>
 )}
 
 </div>
