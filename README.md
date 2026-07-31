@@ -25,9 +25,17 @@ I built this project mainly to learn and experiment with Leaflet... I wanted to 
 * Leaflet
 * IP Geolocation API
 
-## How It Works
+## The "How It Works" Deep Dive
 
-1. Enter an IP address or it fetched your's automatically..
-2. The application fetches information about the IP...
-3. Details such as location, ISP, ASN, network type and datacenter status are displayed...
-4. The approximate location is shown on an interactive Leaflet map that you can zoom and explore...
+Recently, I also added a detailed "How it works" section right inside the app... A lot of people think an IP address magically hides your exact GPS coordinates, but that's actually a huge misconception.. 
+
+In the app, I've explained exactly what happens behind the scenes in really simple terms:
+* **Who owns every IP?** How organizations like Regional Internet Registries (RIRs) allocate entire IP ranges to companies like Google, AWS, and Jio..
+* **WHOIS Records:** How anyone can look up who officially owns an IP block..
+* **ASNs and BGP Routing:** The real backbone of the internet! How ISPs announce their network routes globally so traffic knows exactly where to go..
+* **City-level tracking:** How companies estimate your city by observing thousands of devices, network topography, and cell data over time (no, they don't actually know your street address).. 
+* **Blazing fast lookups:** How converting IPs into integers makes searching through millions of database records take just a few milliseconds...
+
+It's super fascinating to learn how all these networking standards, global coordination, and databases work together just to map an IP to a city..
+
+If you're curious to read the full breakdown and see it all in action, you can check it out live here: **[https://whats-your-ip-human.vercel.app](https://whats-your-ip-human.vercel.app)** .. Just click the "How it works" button in the app to dive in!
