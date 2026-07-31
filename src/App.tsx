@@ -343,10 +343,11 @@ export default function App() {
 
       <div className="flex-1 relative bg-zinc-200 z-0 h-[45vh] lg:h-screen border-t lg:border-t-0 border-zinc-200">
         {showHowItWorks ? (
-          <HowItWorks lat={ipData?.lat} lon={ipData?.lon} />
+          <HowItWorks lat={ipData?.lat} lon={ipData?.lon} ip={ipData?.query} country={ipData?.country} />
         ) : ipData && ipData.lat && ipData.lon ? (
           <LeafletMap lat={ipData.lat} lon={ipData.lon} city={ipData.city} showAttribution={false} />
         ) : (
+
           <div className="w-full h-full flex items-center justify-center bg-zinc-100">
             <div className="flex flex-col items-center space-y-4 opacity-30">
               <i className="ph ph-map-trifold text-4xl"></i>

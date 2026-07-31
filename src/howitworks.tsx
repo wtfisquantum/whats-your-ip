@@ -1,8 +1,5 @@
 import React from 'react';
 import { LeafletMap } from './App';
-
-// ─── Reusable Primitives ─────────────────────────────────────────────────────────
-
 const FlatBadge = ({ children, dark = false }: { children: React.ReactNode, dark?: boolean }) => (
   <span className={`inline-flex items-center px-3 py-1.5 rounded-sm text-xs font-bold uppercase tracking-wider ${dark ? 'bg-zinc-800 text-white' : 'bg-zinc-100 text-zinc-600'}`}>
     {children}
@@ -10,7 +7,7 @@ const FlatBadge = ({ children, dark = false }: { children: React.ReactNode, dark
 );
 
 const CodeBlock = ({ children, title }: { children: React.ReactNode, title?: string }) => (
-  <div className="my-8 rounded-sm overflow-hidden border border-zinc-200 shadow-sm">
+  <div className="my-8 rounded-sm overflow-hidden border border-zinc-200">
     {title && (
       <div className="bg-zinc-100 px-4 py-2 border-b border-zinc-200 text-xs font-bold text-zinc-500 uppercase tracking-widest">
         {title}
@@ -22,6 +19,8 @@ const CodeBlock = ({ children, title }: { children: React.ReactNode, title?: str
   </div>
 );
 
+
+
 const ArrowDown = () => (
   <div className="flex justify-center py-2">
     <i className="ph ph-arrow-down text-zinc-300 text-2xl" />
@@ -29,7 +28,7 @@ const ArrowDown = () => (
 );
 
 const FlowBox = ({ children, highlight = false }: { children: React.ReactNode, highlight?: boolean }) => (
-  <div className={`px-6 py-4 border rounded-sm text-center font-medium text-sm sm:text-base transition-all duration-300 ${highlight ? 'bg-zinc-800 text-white border-zinc-800 shadow-md transform scale-[1.02]' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
+  <div className={`px-6 py-4 border rounded-sm text-center font-medium text-lg transition-all duration-300 ${highlight ? 'bg-zinc-700 text-white border-zinc-800 shadow-md transform scale-[1.02]' : 'border-zinc-200 text-zinc-700 '}`}>
     {children}
   </div>
 );
@@ -49,26 +48,30 @@ const StepHeader = ({ num, title, icon }: { num: string, title: string, icon: st
   </div>
 );
 
-const DataGrid = ({ items }: { items: { label: string, value: string }[] }) => (
+const DataGrid = ({ items }: { items: { label: string, value: string, logo?: string }[] }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
     {items.map((item, i) => (
-      <div key={i} className="p-5 border border-zinc-100 bg-zinc-50 rounded-sm">
-        <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">{item.label}</div>
-        <div className="text-zinc-900 font-medium">{item.value}</div>
+      <div key={i} className="p-3 border border-zinc-200 bg-zinc-50 rounded-sm flex items-center gap-10">
+        {item.logo && (
+          <div className="ml-5 w-14 h-14 flex-shrink-0 flex items-center justify-center">
+            <img src={item.logo} alt={item.label} className="max-w-full max-h-full object-contain filter invert" />
+          </div>
+        )}
+        <div>
+          <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">{item.label}</div>
+          <div className="text-zinc-900 font-medium">{item.value}</div>
+        </div>
       </div>
     ))}
   </div>
 );
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
-export default function HowItWorks({ lat = 20, lon = 0 }) {
+export default function HowItWorks({ lat = 20, lon = 0, ip = '49.32.128.15', country = "Your Country" }) {
   return (
     <div className="w-full h-full overflow-y-auto custom-scrollbar bg-zinc-50 text-zinc-900 font-sans selection:bg-zinc-200" style={{ fontFamily: "'Rubik', sans-serif" }}>
 
 
 
-      {/* ── Hero Article Header ── */}
       <header className="relative bg-white border-b border-zinc-200 pt-24 pb-20 px-6 overflow-hidden">
         <div className="absolute inset-0 z-0  opacity-40 mix-blend-luminosity pointer-events-none ">
           <LeafletMap lat={lat} lon={lon} city="" zoom={17} showControls={false} showAttribution={false} offsetX={-190} offsetY={-90} />
@@ -105,7 +108,7 @@ export default function HowItWorks({ lat = 20, lon = 0 }) {
         {/* Intro */}
         <section className="prose text-lg prose-zinc prose-lg max-w-none">
           <p className="text-xl text-zinc-700 leading-relaxed font-medium">
-            At first glance, it feels almost magical. How can a simple number like <code className="bg-zinc-200 px-2 py-1 rounded-sm text-sm font-bold text-zinc-900">49.32.128.15</code> reveal your country, city, ISP and even whether you're using a VPN?  The answer is surprisingly fascinating...
+            At first glance, it feels almost magical. How can a simple number like <code className="bg-zinc-200 px-2 py-1 rounded-sm text-sm font-bold text-zinc-900">{ip}</code> reveal your country, city, ISP and even whether you're using a VPN?  The answer is surprisingly fascinating...
           </p>
           {/* <p className="text-zinc-600 leading-relaxed mt-6">
             The answer is surprisingly fascinating—and it has nothing to do with websites secretly tracking your GPS. Let's dive deep into what actually happens behind the scenes.
@@ -119,19 +122,19 @@ export default function HowItWorks({ lat = 20, lon = 0 }) {
               Whenever you access a website, your browser sends an HTTP request. That request contains one very important piece of information: <strong>Your Public IP Address</strong>.
             </p>
             <CodeBlock title="Example Request Payload">
-              {`GET / HTTP/1.1
-Host: www.example.com
-X-Forwarded-For: 49.32.128.15`}
+              <span className="text-pink-600 font-semibold">GET</span> <span className="text-cyan-600">/</span> <span className="text-pink-600 font-semibold">HTTP/1.1</span><br />
+              <span className="text-blue-600 font-semibold">Host:</span> <span className="text-zinc-600">whats-your-ip-human.vercel.app</span><br />
+              <span className="text-blue-600 font-semibold">X-Forwarded-For:</span> <span className="text-amber-600">{ip}</span>
             </CodeBlock>
             <p>
               Without this IP address, the server wouldn't even know where to send its response. Think of an IP address as your home's mailing address on the Internet. The server's first job is simply to read this address.
             </p>
-            <div className="bg-white p-6 border-l-4 border-zinc-800 rounded-r-sm shadow-sm">
+            <div className="bg-white p-6 border-l-4 border-zinc-800 rounded-r-sm ">
               <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-widest mb-2 flex items-center gap-2">
                 <i className="ph-fill ph-warning-circle text-lg" /> Core Misconception
               </h4>
               <p className="text-zinc-600 m-0">
-                An IP address itself <strong>does not encode</strong> information like your country or city. <code className="bg-zinc-100 px-1 text-sm">49.32.128.15</code> doesn't secretly contain the word "India". It's just a 32-bit number. All additional information comes from enormous external databases.
+                An IP address itself <strong>does not encode</strong> information like your country or city. <code className="bg-zinc-100 px-1 text-sm">{ip}</code> doesn't secretly contain the word "{country}". It's just a 32-bit number. All additional information comes from enormous external databases.
               </p>
             </div>
           </div>
@@ -144,59 +147,238 @@ X-Forwarded-For: 49.32.128.15`}
             <p>
               The Internet isn't a random collection of addresses. Every public IP block belongs to an organization. Instead of assigning IP addresses one by one, organizations receive entire ranges.
             </p>
-            <DataGrid items={[
-              { label: 'Cloudflare', value: '1.1.1.0/24' },
-              { label: 'Google', value: '8.8.8.0/24' },
-              { label: 'Reliance Jio', value: '49.32.0.0/11' },
-              { label: 'Amazon AWS', value: '3.5.0.0/16' }
-            ]} />
+            <DataGrid
+              items={[
+                // DNS / CDN
+                {
+                  label: 'Cloudflare',
+                  value: '1.1.1.0/24',
+                  logo: 'https://api-point-search.vercel.app/icon/cloudflare'
+                },
+                {
+                  label: 'Google',
+                  value: '8.8.8.0/24',
+                  logo: 'https://api-point-search.vercel.app/icon/google'
+                },
+                {
+                  label: 'Google Cloud',
+                  value: '34.64.0.0/10',
+                  logo: 'https://static.vecteezy.com/system/resources/previews/072/678/162/non_2x/google-cloud-logo-icon-free-png.png'
+                },
+                {
+                  label: 'Amazon AWS',
+                  value: '3.5.0.0/16',
+                  logo: 'https://api-point-search.vercel.app/icon/amazon'
+                },
+                {
+                  label: 'Reliance Jio',
+                  value: '49.32.0.0/11',
+                  logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Reliance_Jio_Logo_%28October_2015%29.svg/960px-Reliance_Jio_Logo_%28October_2015%29.svg.png'
+                },
+                {
+                  label: 'BSNL',
+                  value: '117.192.0.0/10',
+                  logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/BSNL_logo_with_slogan.svg/960px-BSNL_logo_with_slogan.svg.png'
+                },
+                {
+                  label: 'Microsoft Azure',
+                  value: '20.0.0.0/11',
+                  logo: 'https://api-point-search.vercel.app/icon/microsoft'
+                },
+                {
+                  label: 'Bharti Airtel',
+                  value: '122.160.0.0/12',
+                  logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Bharti_Airtel_Logo.svg'
+                },
+
+                {
+                  label: 'Vodafone Idea (Vi)',
+                  value: '49.200.0.0/13',
+                  logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Vodafone_Idea_logo.svg/250px-Vodafone_Idea_logo.svg.png'
+                },
+
+                {
+                  label: 'Oracle Cloud',
+                  value: '129.146.0.0/16',
+                  logo: 'https://flexy.id/_next/static/media/oracle_cloud_infrastructure_logo.af32663b.png'
+                },
+                {
+                  label: 'DigitalOcean',
+                  value: '134.122.0.0/16',
+                  logo: 'https://api-point-search.vercel.app/icon/digitalocean'
+                },
+                {
+                  label: 'Linode',
+                  value: '45.33.0.0/16',
+                  logo: 'https://pcr.cloud-mercato.com/static/img/logo/linode.png'
+                },
+                {
+                  label: 'Hetzner',
+                  value: '88.198.0.0/16',
+                  logo: 'https://www.svgrepo.com/show/331425/hetzner.svg'
+                },
+                {
+                  label: 'OVHcloud',
+                  value: '51.68.0.0/16',
+                  logo: 'https://indelec.com/wp-content/uploads/ovhcloud-logo.png'
+                },
+                {
+                  label: 'Vultr',
+                  value: '149.28.0.0/16',
+                  logo: 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/vultr.webp'
+                },
+
+                // Indian Telecom
+                {
+                  label: 'Tata Communications',
+                  value: '14.96.0.0/12',
+                  logo: 'https://companieslogo.com/img/orig/TATACOMM.NS-cdc72eca.png?t=1720244494'
+                },
+
+                // Global ISPs
+                {
+                  label: 'Comcast',
+                  value: '73.0.0.0/8',
+                  logo: 'https://companieslogo.com/img/orig/CMCSA-6309c0ab.png?t=1720244491'
+                },
+                {
+                  label: 'AT&T',
+                  value: '99.0.0.0/8',
+                  logo: 'https://brandlogos.net/wp-content/uploads/2022/05/att-logo_brandlogos.net_57cuk.png'
+                },
+
+                {
+                  label: 'IBM Cloud',
+                  value: '169.44.0.0/14',
+                  logo: 'https://api-point-search.vercel.app/icon/ibm'
+                },
+                {
+                  label: 'GitHub',
+                  value: '140.82.112.0/20',
+                  logo: 'https://cdn.worldvectorlogo.com/logos/github-icon-2.svg'
+                },
+              ]}
+            />
             <p>
-              The global Internet is managed by five <strong>Regional Internet Registries (RIRs)</strong>. Whenever an ISP requests new IP ranges, these organizations officially register the organization name, country, and contact info.
+              The global Internet is managed by five <strong>Regional Internet Registries (RIRs)</strong>. Whenever an ISP requests new IP ranges, these organizations officially register the organization name, country, and contact info. This becomes the first layer of information available to IP lookup providers.
             </p>
 
             {/* Visual block for RIRs */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-8">
               {[
-                { name: 'ARIN', region: 'North America' },
-                { name: 'RIPE NCC', region: 'Europe / Middle East' },
-                { name: 'APNIC', region: 'Asia-Pacific' },
-                { name: 'AFRINIC', region: 'Africa' },
-                { name: 'LACNIC', region: 'Latin America' },
+                { name: 'ARIN', region: 'North America', logo: "https://www.arin.net/img/ARIN-logo-std.svg" },
+                { name: 'RIPE NCC', region: 'Europe / Middle East', logo: "https://www.ripe.net/static/images/ripe-community-logo.svg" },
+                { name: 'APNIC', region: 'Asia-Pacific', logo: "https://wp.logos-download.com/wp-content/uploads/2019/06/Asia-Pacific_Network_Information_Centre_Logo_white_text.png" },
+                { name: 'AFRINIC', region: 'Africa', logo: "https://rackzar.com/assets/img/logos/AFRINIC-logo-white.webp" },
+                { name: 'LACNIC', region: 'Latin America', logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Logo_-_LACNIC.svg/1280px-Logo_-_LACNIC.svg.png" },
               ].map(rir => (
-                <div key={rir.name} className="bg-white border border-zinc-200 p-4 rounded-sm text-center shadow-sm">
-                  <div className="font-medium text-zinc-900 mb-2">{rir.name}</div>
-                  <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{rir.region}</div>
+                <div key={rir.name} className="p-3 border border-zinc-200 bg-zinc-50 rounded-sm flex items-center gap-10 ">
+                  <div className="ml-5 w-14 h-14 flex-shrink-0 flex items-center justify-center">
+                    <img src={rir.logo} alt={rir.name} className="max-w-full max-h-full object-contain filter invert" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{rir.region}</div>
+                    <div className="font-medium text-zinc-900 mt-2">{rir.name}</div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Step 6 & 7 */}
         <section>
-          <StepHeader num="03" title="ASNs and BGP Routing" icon="ph-share-network" />
+          <StepHeader num="03" title="WHOIS Records" icon="ph-share-network" />
           <div className="prose text-lg prose-zinc max-w-none text-zinc-600 leading-relaxed space-y-6">
             <p>
-              Every large network connected to the Internet is assigned an <strong>Autonomous System Number (ASN)</strong>. Think of an ASN as the unique identity of an ISP on the global Internet (e.g., Google is <code className="bg-zinc-200 px-1 text-sm rounded-sm">AS15169</code>).
+              Now that we know IP addresses are allocated by Regional Internet Registries (RIRs), the next question is.. <strong>How can anyone find out who owns a particular IP address?</strong>
             </p>
             <p>
-              Internet routers don't exchange individual IP addresses. They exchange entire IP ranges using ASNs via the <strong>Border Gateway Protocol (BGP)</strong>.
+              The answer lies in <strong>WHOIS</strong>.
+              Whenever an organization such as an ISP, cloud provider or large enterprise receives an IP block from a Regional Internet Registry (RIR), that allocation is recorded in a publicly <strong>WHOIS</strong> database.
+              Just like land records tell you who owns a piece of property, WHOIS records tell you who has been allocated a particular IP address or IP range.
             </p>
 
-            <div className="bg-white p-8 border border-zinc-200 rounded-sm shadow-sm my-8">
-              <h4 className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest mb-6">Live BGP Announcement Flow</h4>
-              <FlowBox>Router broadcasts: "I am AS55836 (Jio)"</FlowBox>
-              <ArrowDown />
-              <FlowBox>Announces route for: 49.32.0.0/11</FlowBox>
-              <ArrowDown />
-              <FlowBox highlight>Global Internet Routing Table Updated</FlowBox>
-              <ArrowDown />
-              <FlowBox>IP Intelligence Companies ingest this live feed</FlowBox>
+            <p>
+              The WHOIS record for an IP address typically includes the following information:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+              {['Which organization owns the IP', 'Which RIR allocated it', 'Country details of the allocation', 'The network\'s official name', 'ASN associated with that IP', 'Admin registration details'].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 p-4 border border-zinc-200 rounded-sm">
+                  <i className="ph-fill ph-check-circle text-rose-500 text-xl" />
+                  <span className="text-lg font-medium text-zinc-900">{item}</span>
+                </div>
+              ))}
             </div>
 
             <p>
-              Because companies continuously monitor these live routing announcements, they know exactly which ISP is currently serving an IP address. This makes ISP identification extremely accurate.
+              However, WHOIS also has its limitations. It does not tell us:
             </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+              {['The user\'s exact location', 'The city they\'re currently in', 'GPS coordinates or address', 'Whether they\'re using a VPN'].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 p-4 border border-zinc-200 rounded-sm">
+                  <i className="ph-fill ph-x-circle text-cyan-600 text-xl" />
+                  <span className="text-lg font-medium text-zinc-900">{item}</span>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </section>
+
+
+
+
+        {/* Step 6 & 7 */}
+        <section>
+          <StepHeader num="04" title="ASNs and BGP Routing" icon="ph-share-network" />
+          <div className="prose text-lg prose-zinc max-w-none text-zinc-600 leading-relaxed space-y-6">
+            <p>
+              By now, we've learned that WHOIS records can tell us who owns an IP range. But Knowing that an IP belongs to Reliance Jio or Google doesn't tell us how Internet traffic actually reaches that network. To understand that, we need to look at two of the Internet's most important concepts.
+
+            </p>
+            <p>
+              <strong>Autonomous Systems (AS)</strong> and <strong>Border Gateway Protocol (BGP)</strong>.
+              These two technologies work together to form the backbone of global Internet routing.
+            </p>
+
+
+            <p>
+              An <strong>Autonomous System</strong> is a large network or a group of interconnected networks that operates under a single administrative organization and follows a common routing policy.
+              In simpler terms, an ISP or cloud provider doesn't manage routers individually on the global Internet. Instead, all of its infrastructure is represented as one logical network called an Autonomous System.
+              Every Autonomous System is assigned a globally unique identifier known as an <strong>Autonomous System Number (ASN)</strong>. This allows routers across the world to identify which network they are communicating with.
+            </p>
+
+            <p>
+              Now that every major network has an ASN, the next challenge is enabling these networks to communicate with one another.
+
+              This is where the <strong>Border Gateway Protocol (BGP)</strong> comes into play.
+
+              BGP is the protocol responsible for exchanging routing information between Autonomous Systems.
+
+
+              Instead of asking, <em>Where is IP 49.32.128.15?</em> ~ Routers ask, <em>Which Autonomous System (AS) is responsible for the network containing this IP?</em>
+            </p>
+
+            <p>
+              And the response is something like: <em>If you're trying to reach any IP address within <strong>49.32.0.0/11</strong>, send the traffic to <strong>AS55836</strong>.</em>
+
+            </p>
+            <p>Every ISP, cloud provider, Internet exchange and backbone carrier continuously exchanges these announcements with one another.
+
+              As these updates propagate across the Internet, routers gradually build a complete picture of which Autonomous System is responsible for every reachable IP range.
+
+              This continuously updated collection of routing information is known as the <strong>global BGP routing table</strong>.
+            </p>
+
+            <div className="mt-8">
+              <FlowBox>IP Address ~ 49.32.128.15</FlowBox>
+              <ArrowDown />
+              <FlowBox>IP Range falls inside ~ 49.32.0.0/11</FlowBox>
+              <ArrowDown />
+              <FlowBox>Originated by Autonomous System ~ AS55836</FlowBox>
+              <ArrowDown />
+              <FlowBox>ISP ~ Reliance Jio Infocomm Limited India</FlowBox>
+            </div>
           </div>
         </section>
 
@@ -207,43 +389,40 @@ X-Forwarded-For: 49.32.128.15`}
             <p>
               This is probably the most misunderstood part. An IP address <strong>does not reveal a city directly</strong>. Instead, providers estimate it using multiple signals built up over time.
             </p>
+            <div className="mt-8">
+              {/* <h4 className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest mb-6">City Resolution Hierarchy</h4> */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="border border-zinc-200 px-4 py-3 rounded-sm text-zinc-700 font-medium text-lg">IP Range</div>
+                <i className="ph ph-arrow-right text-zinc-300 text-2xl hidden sm:block" />
+                <i className="ph ph-arrow-down text-zinc-300 text-2xl block sm:hidden" />
+                <div className=" border border-zinc-200 px-4 py-3 rounded-sm text-zinc-700 font-medium text-lg">Bengaluru</div>
+                <i className="ph ph-arrow-right text-zinc-300 text-2xl hidden sm:block" />
+                <i className="ph ph-arrow-down text-zinc-300 text-2xl block sm:hidden" />
+                <div className=" border border-zinc-200 px-4 py-3 rounded-sm text-zinc-700 font-medium text-lg">Karnataka</div>
+                <i className="ph ph-arrow-right text-zinc-300 text-2xl hidden sm:block" />
+                <i className="ph ph-arrow-down text-zinc-300 text-2xl block sm:hidden" />
+                <div className="border border-zinc-200 px-4 py-3 rounded-sm text-zinc-700 font-medium text-lg">India</div>
+              </div>
+            </div>
             <p>
-              If thousands of devices using a specific IP range consistently appear around Bengaluru, India, the provider gradually associates that IP range with Bengaluru. They use supporting signals like:
+              If thousands or million of devices using a specific IP range consistently appear around Bengaluru, India, the provider gradually associates that IP range with Bengaluru. They use supporting signals like:
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
               {['ISP network topology', 'Reverse DNS hostnames', 'Mobile carrier cell data', 'CDN edge locations', 'Network measurement projects', 'Anonymous usage stats'].map((item, i) => (
                 <div key={i} className="flex items-center gap-3 bg-white p-4 border border-zinc-200 rounded-sm">
                   <i className="ph-fill ph-check-circle text-zinc-800 text-xl" />
-                  <span className="text-sm font-medium text-zinc-700">{item}</span>
+                  <span className="text-lg font-medium text-zinc-700">{item}</span>
                 </div>
               ))}
             </div>
-
-            <div className="bg-white p-8 border border-zinc-200 rounded-sm shadow-sm mt-8">
-              <h4 className="text-center text-xs font-bold text-zinc-400 uppercase tracking-widest mb-6">City Resolution Hierarchy</h4>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <div className="bg-zinc-50 border border-zinc-200 px-4 py-3 rounded-sm font-mono text-sm text-zinc-600">IP Range</div>
-                <i className="ph ph-arrow-right text-zinc-300 text-2xl hidden sm:block" />
-                <i className="ph ph-arrow-down text-zinc-300 text-2xl block sm:hidden" />
-                <div className="bg-zinc-100 border border-zinc-300 px-4 py-3 rounded-sm font-medium text-zinc-700">Bengaluru</div>
-                <i className="ph ph-arrow-right text-zinc-300 text-2xl hidden sm:block" />
-                <i className="ph ph-arrow-down text-zinc-300 text-2xl block sm:hidden" />
-                <div className="bg-zinc-200 border border-zinc-400 px-4 py-3 rounded-sm font-bold text-zinc-800">Karnataka</div>
-                <i className="ph ph-arrow-right text-zinc-300 text-2xl hidden sm:block" />
-                <i className="ph ph-arrow-down text-zinc-300 text-2xl block sm:hidden" />
-                <div className="bg-zinc-800 border border-zinc-800 px-4 py-3 rounded-sm font-bold text-white shadow-md">India</div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-start gap-4 p-5 bg-zinc-100 rounded-sm">
-              <i className="ph-fill ph-crosshair text-2xl text-zinc-500 mt-1" />
-              <div>
-                <h5 className="font-bold text-zinc-900 mb-1">What about Latitude & Longitude?</h5>
-                <p className="text-sm text-zinc-600 m-0">
-                  They don't know your exact coordinates. The returned coordinates usually represent the approximate city center, an ISP Point of Presence, or a regional network hub. It is <strong>not</strong> your physical address.
-                </p>
-              </div>
+            <div className="bg-white p-6 border-l-4 border-zinc-800 rounded-r-sm ">
+              <h4 className="text-sm font-bold text-zinc-900 uppercase tracking-widest mb-2 flex items-center gap-2">
+                <i className="ph-fill ph-crosshair text-lg" /> What about Latitude & Longitude?
+              </h4>
+              <p className="text-zinc-600 m-0">
+                They don't know your exact coordinates. The returned coordinates usually represent the approximate city center, an ISP Point of Presence, or a regional network hub. It is <strong>not</strong> your physical address.
+              </p>
             </div>
           </div>
         </section>
@@ -257,18 +436,18 @@ X-Forwarded-For: 49.32.128.15`}
             </p>
 
             <CodeBlock title="Integer Conversion & Search">
-              {`// 1. Convert IP to Integer
-49.32.15.200  →  824184776
-
-// 2. Database stores ranges as integers
-Start IP: 824180000
-End IP:   824190000
-Country:  India
-ISP:      Reliance Jio
-
-// 3. Fast Range Search using Binary Search Trees
-SELECT * FROM ip_blocks 
-WHERE start_ip <= 824184776 AND end_ip >= 824184776`}
+              <span className="text-zinc-400 italic">// 1. Convert IP to Integer</span><br />
+              <span className="text-amber-600">49.32.15.200</span> <span className="text-zinc-400">→</span> <span className="text-purple-600">824184776</span><br />
+              <br />
+              <span className="text-zinc-400 italic">// 2. Database stores ranges as integers</span><br />
+              <span className="text-blue-600 font-semibold">Start IP:</span> <span className="text-purple-600">824180000</span><br />
+              <span className="text-blue-600 font-semibold">End IP:</span>   <span className="text-purple-600">824190000</span><br />
+              <span className="text-blue-600 font-semibold">Country:</span>  <span className="text-green-600">India</span><br />
+              <span className="text-blue-600 font-semibold">ISP:</span>      <span className="text-green-600">Reliance Jio</span><br />
+              <br />
+              <span className="text-zinc-400 italic">// 3. Fast Range Search using Binary Search Trees</span><br />
+              <span className="text-pink-600 font-semibold">SELECT</span> <span className="text-zinc-500">*</span> <span className="text-pink-600 font-semibold">FROM</span> <span className="text-cyan-600">ip_blocks</span><br />
+              <span className="text-pink-600 font-semibold">WHERE</span> <span className="text-blue-600">start_ip</span> <span className="text-zinc-500">{"<="}</span> <span className="text-purple-600">824184776</span> <span className="text-pink-600 font-semibold">AND</span> <span className="text-blue-600">end_ip</span> <span className="text-zinc-500">{">="}</span> <span className="text-purple-600">824184776</span>
             </CodeBlock>
 
             <p>
@@ -286,7 +465,7 @@ WHERE start_ip <= 824184776 AND end_ip >= 824184776`}
             </p>
           </div>
 
-          <div className="bg-white border border-zinc-200 rounded-sm overflow-hidden shadow-sm">
+          <div className="bg-white border border-zinc-200 rounded-sm overflow-hidden ">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-zinc-100 border-b border-zinc-200">
@@ -320,7 +499,7 @@ WHERE start_ip <= 824184776 AND end_ip >= 824184776`}
         </section>
 
         {/* Conclusion */}
-        {/* <section className="bg-white border border-zinc-200 p-8 md:p-12 rounded-sm shadow-sm text-center">
+        {/* <section className="bg-white border border-zinc-200 p-8 md:p-12 rounded-sm  text-center">
           <i className="ph-fill ph-check-circle text-5xl text-zinc-800 mb-6" />
           <h2 className="text-3xl font-bold text-zinc-900 mb-6 tracking-tight">The Final Word</h2>
           <p className="text-lg text-zinc-600 leading-relaxed max-w-2xl mx-auto mb-10">
@@ -348,6 +527,6 @@ WHERE start_ip <= 824184776 AND end_ip >= 824184776`}
           }
         `
       }} />
-    </div>
+    </div >
   );
 }
