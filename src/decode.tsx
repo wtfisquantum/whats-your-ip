@@ -110,7 +110,7 @@ const LiveMap = () => {
             }).setView([20.5937, 78.9629], 5); // Default start position
 
             // Add the custom Stamen Toner tiles
-            window.L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 20,
                 attribution: '&copy; Stadia Maps'
             }).addTo(mapInstance.current);
@@ -748,6 +748,9 @@ export default function TechVerseApp() {
     return (
         <div className="bg-slate-900 flex justify-center font-sans selection:bg-violet-200">
             <style>{`
+            html {
+            filter: invert(1) !important;
+            }
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
       `}</style>
             <div className="w-full max-w-md bg-white h-[100dvh] flex flex-col relative shadow-2xl overflow-hidden">
